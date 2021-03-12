@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>GameAwards</title>
+    <meta name = "viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="GameAwards.css">
+  </head>
+
+  <body>
+    <div class="header-container">
+    <div onClick="window.location.reload();" class="site-title">
+      <img src="header.svg">
+    </div>
+    <div id="select-category">
+      <div class="select-container">
+        <div class="arrow">>&nbsp; 
+        </div>
+        <select name="categories" id="categories">
+          <option value="All">All</option>
+          <option value="Game of the Year">Game of the Year</option>
+          <option value="Best Game Direction">Best Game Direction</option>
+          <option value="Best Ongoing Game">Best Ongoing Game</option>
+        </select>
+      </div>
+    </div>
+  </div>
+    <div id="page-change">
+      <div id="page" class="page-container">
+        <div class="start">
+          <div>
+          <div class="game">
+            <div class="crown-container">
+              <img src="crown.svg">
+            </div>
+            <div class="pacman">
+                <div class="pacman-top"></div>
+                <div class="pacman-bottom"></div>
+            </div>
+            <div class="dots-list">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+          </div>
+          <form id="start-button">
+            <div class="start-container">
+              <div class="arrow">>&nbsp; </div>
+              <button id="button" onclick="addElement()">Get Started</button></div>
+            <div>Load</div>
+            <div>Options</div>
+            <div>Quit</div>
+          </form>
+          <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+          <script>
+            function addElement(){
+              console.log("running");
+              var el = document.getElementById("select-category");
+              el.style.visibility = 'visible';
+
+            }
+            function addDescription(image){
+              console.log(image)
+              var el = document.getElementById(image);
+              var x = el.getElementsByClassName('overlay');
+              var y = el.getElementsByClassName('gameDescription');
+              for (var i = 0; i < x.length; i++) {
+                x[i].style.visibility = 'hidden';
+              }
+              for (var i = 0; i < y.length; i++) {
+                y[i].style.visibility = 'visible';
+              }
+            }
+            function removeDescription(image){
+              // console.log(image)
+              var el = document.getElementById(image);
+              var x = el.getElementsByClassName('overlay');
+              var y = el.getElementsByClassName('gameDescription');
+              for (var i = 0; i < x.length; i++) {
+                x[i].style.visibility = 'visible';
+              }
+              for (var i = 0; i < y.length; i++) {
+                y[i].style.visibility = 'hidden';
+              }
+            }
+            $("#button").click(function(e) {
+                e.preventDefault();
+                var all_value = $(this).val();
+                $.ajax({
+                  type: "POST",
+                  url: 'GameAwards.php',
+                  data: {all_value: all_value},
+                  success: function(data) {
+                    $( "#page-change" ).html(data);
+                  }
+                });
+            });
+            $(document).ready(function(){
+              $('#categories').change(function(){
+                var inputValue = $(this).val();
+                $.ajax({
+                  type: "POST",
+                  url: 'GameAwards.php',
+                  data: {value: inputValue},
+                  success: function(data){
+                    $( "#page-change" ).html(data);
+                  }
+                });
+            });
+        });
+
+            // $("#1").hover(function (e) {
+            //   e.preventDefault();
+            //   var all_value = $(this).val();
+            //     $.ajax({
+            //         type: "POST",
+            //         url: 'GameHover.php',
+            //         data: {all_value: all_value},
+            //         success: function(data) {
+            //         $( "#1" ).html(data);
+            //       }
+            //     });
+            // });
+          </script>
+        </div>
+        </div>
+      </div>
+      <div class="pac-floor">
+        <hr><hr>
+      </div>
+    </div>
+  </body>
+</html>
